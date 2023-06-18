@@ -1,4 +1,7 @@
 const { findUser, createNewUser, getAllUsers } = require("../db/userQueries");
+const jwt = require("jsonwebtoken");
+require("dotenv").config;
+const jwtSecret = process.env.JWT_SECRET;
 
 exports.getUsers = async (req, res) => {
 	try {
@@ -16,9 +19,25 @@ exports.postUsers = async (req, res) => {
 		let user = await findUser(email);
 		if (user) {
 			console.log(user, "User already exists");
-			res.json({ user, message: "user exists" });
+			const payload = {
+				id: user.id,
+			};
+			jwt.sign(payload, jwtSecret, {}, (err, token) => {
+				if (err) throw err;
+				res.json({ user, token });
+			});
 		} else {
 			user = await createNewUser(uid, name, email, mobile, photoURL);
+			await user.save();
+			const payload = {
+				id: user.id,
+			};
+
+			jwt.sign(payload, jwtSecret, {}, (err, token) => {
+				if (err) throw err;
+				res.json({ user, token });
+			});
+
 			res.json({ user, message: "user saved" });
 		}
 	} catch (err) {
