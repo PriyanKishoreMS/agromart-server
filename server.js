@@ -3,10 +3,12 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 const routes = require("./routes/routes.js");
 const connectMongoDB = require("./config/mongodb.js");
+const cors = require("cors");
 
 connectMongoDB();
 
 app.use(express.json());
+app.use(cors({ origin: "http://localhost:5173" }));
 
 app.use("/api", routes);
 
