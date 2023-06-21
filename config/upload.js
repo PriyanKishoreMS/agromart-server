@@ -1,14 +1,22 @@
 const multer = require("multer");
 
-const fileStorageEngine = multer.diskStorage({
+const landFileStorageEngine = multer.diskStorage({
 	destination: (req, file, cb) => {
-		cb(null, "./uploads");
+		cb(null, "./uploads/lands");
 	},
 	filename: (req, file, cb) => {
 		cb(null, Date.now() + "--" + file.originalname);
 	},
 });
 
-const upload = multer({ storage: fileStorageEngine });
+const productFileStorageEngine = multer.diskStorage({
+	destination: (req, file, cb) => {
+		cb(null, "./uploads/products");
+	},
+	filename: (req, file, cb) => {
+		cb(null, Date.now() + "--" + file.originalname);
+	},
+});
 
-module.exports = upload;
+exports.landUpload = multer({ storage: landFileStorageEngine });
+exports.productUpload = multer({ storage: productFileStorageEngine });

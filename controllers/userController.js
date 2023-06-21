@@ -5,8 +5,14 @@ const jwtSecret = process.env.JWT_SECRET;
 
 exports.getUsers = async (req, res) => {
 	try {
-		let user = await getAllUsers();
-		res.json(user);
+		const page = parseInt(req.query.page) - 1 || 0;
+		const limit = parseInt(req.query.limit) || 10;
+		const search = req.query.search || "";
+		const sort = req.query.sort || "date";
+		const order = req.query.order || "desc";
+
+		let users = await getAllUsers(page, limit, search, sort, order);
+		res.json(users);
 	} catch (err) {
 		console.error(err.message);
 		res.status(500).send("Server Error");
@@ -20,7 +26,9 @@ exports.postUsers = async (req, res) => {
 		if (user) {
 			console.log(user.id, "already exists");
 			const payload = {
-				id: user.id,
+				user: {
+					id: user.id,
+				},
 			};
 			jwt.sign(payload, jwtSecret, {}, (err, token) => {
 				if (err) throw err;

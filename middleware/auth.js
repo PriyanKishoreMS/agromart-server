@@ -11,9 +11,10 @@ const auth = (req, res, next) => {
 		jwt.verify(token, jwtSecret, (err, decoded) => {
 			if (err) {
 				console.err(err);
-				res.status(500).json({ msg: "Token Invalid" });
+				return res.status(401).json({ msg: "Token Invalid" });
 			} else {
 				req.user = decoded.user;
+				console.log("user", req.user);
 				next();
 			}
 		});
