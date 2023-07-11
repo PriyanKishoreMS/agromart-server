@@ -33,3 +33,41 @@ exports.getAllLandServices = async (page, limit, search, sort, order) => {
 		console.error({ Message: "Query Error getting land services", Error: err });
 	}
 };
+
+exports.getAllLandServicesinCategory = async (
+	page,
+	limit,
+	search,
+	sort,
+	order,
+	category
+) => {
+	try {
+		let lands = await LandService.find({
+			landLocation: { $regex: search, $options: "i" },
+			cultivationType: category,
+		})
+			.sort({ [sort]: order })
+			.skip(page * limit)
+			.limit(limit)
+			.populate("user", "name photoURL");
+
+		const total = await LandService.countDocuments({
+			landLocation: { $regex: search, $options: "i" },
+			cultivationType: category,
+		});
+
+		const totalPages = Math.ceil(total / limit);
+		return {
+			page: page + 1,
+			lands,
+			totalPages,
+		};
+	} catch (err) {
+		console.error({
+			Message: "Query Error getting category land services",
+			Error: err,
+		});
+		throw err;
+	}
+};

@@ -9,6 +9,25 @@ const LandSchema = new mongoose.Schema({
 		type: String,
 		required: true,
 	},
+	landArea: {
+		type: String,
+		required: true,
+	},
+	registered: {
+		type: Boolean,
+		default: true,
+	},
+	cropType: {
+		type: String,
+		required: true,
+	},
+	cultivationType: {
+		type: String,
+		required: true,
+	},
+	cultivationHistory: {
+		type: String,
+	},
 	soilType: {
 		type: String,
 	},

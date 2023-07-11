@@ -2,6 +2,7 @@ const { landUpload } = require("../config/upload");
 const {
 	createLandService,
 	getAllLandServices,
+	getAllLandServicesinCategory,
 } = require("../db/landServiceQueries");
 
 exports.getLandServices = async (req, res) => {
@@ -26,13 +27,47 @@ exports.getLandServices = async (req, res) => {
 	}
 };
 
+exports.getLandCategory = async (req, res) => {
+	try {
+		const page = parseInt(req.query.page) - 1 || 0;
+		const limit = parseInt(req.query.limit) || 10;
+		const search = req.query.search || "";
+		const sort = req.query.sort || "date";
+		const order = req.query.order || "desc";
+		const category = req.params.category;
+
+		let landServices = await getAllLandServicesinCategory(
+			page,
+			limit,
+			search,
+			sort,
+			order,
+			category
+		);
+		res.json(landServices);
+	} catch (err) {
+		console.error({
+			Message: "Controller Error getting category lands",
+			Error: err,
+		});
+		res.status(500).send("Server Error");
+	}
+};
+
 exports.postLandService = async (req, res) => {
 	try {
-		const { landLocation, soilType, waterFacility, landPrice, landDesc } =
-			req.body;
+		// const { landLocation, soilType, waterFacility, landPrice, landDesc } =
+		// 	req.body;
 		const user = req.user.id;
-		// const landLocation = "Kathmandu";
-		// const soilType = "Black";
+		const landLocation = "Chengalpattu";
+		const soilType = "Black";
+		const landArea = "700";
+		const cropType = "Tomato";
+		const cultivationType = "Organic";
+		const cultivationHistory = "Past 3 years organic cultivation";
+		const waterFacility = "Yes";
+		const landPrice = "70000";
+		const landDesc = "Land good for cultivation";
 		// const waterFacility = "Yes";
 		// const landPrice = "100000";
 		// const landDesc = "This is a land";
@@ -49,6 +84,10 @@ exports.postLandService = async (req, res) => {
 			user,
 			landLocation,
 			soilType,
+			landArea,
+			cropType,
+			cultivationType,
+			cultivationHistory,
 			waterFacility,
 			landPrice,
 			landDesc,

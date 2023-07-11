@@ -45,7 +45,7 @@ exports.getAllProductsinCategory = async (
 
 		const total = await Product.countDocuments({
 			productName: { $regex: search, $options: "i" },
-			category: category,
+			productCategory: category,
 		});
 		const totalPages = Math.ceil(total / limit);
 		return {

@@ -3,6 +3,7 @@ const { getUsers, postUsers } = require("../controllers/userController");
 const {
 	getLandServices,
 	postLandService,
+	getLandCategory,
 } = require("../controllers/landServiceController");
 const {
 	getProducts,
@@ -16,6 +17,7 @@ router.route("/getUser").get(getUsers);
 router.route("/postUser").post(postUsers);
 
 router.route("/getLandService").get(auth, getLandServices);
+router.route("/getLandService/:category").get(auth, getLandCategory);
 router.route("/postLandService").post(auth, postLandService);
 
 router.route("/getProduct").get(auth, getProducts);
