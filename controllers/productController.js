@@ -65,15 +65,15 @@ exports.postProduct = async (req, res) => {
 		// const productDescription = "This is an apple";
 		// const productPrice = "100";
 		// const productQuantity = "10";
-		const uploadPromise = new Promise((resolve, reject) => {
-			productUpload.array("images", 3)(req, res, err => {
-				if (err) return res.status(500).json({ msg: "Error uploading image" });
-				let productImage = req.files.map(file => file.path);
-				console.log("first", productImage);
-				resolve(productImage);
-			});
-		});
-		const productImage = await uploadPromise;
+		// const uploadPromise = new Promise((resolve, reject) => {
+		// 	productUpload.array("images", 3)(req, res, err => {
+		// 		if (err) return res.status(500).json({ msg: "Error uploading image" });
+		// 		let productImage = req.files.map(file => file.path);
+		// 		console.log("first", productImage);
+		// 		resolve(productImage);
+		// 	});
+		// });
+		// const productImage = await uploadPromise;
 		const productData = {
 			user,
 			productName,
@@ -82,7 +82,7 @@ exports.postProduct = async (req, res) => {
 			productDescription,
 			productPrice,
 			productQuantity,
-			productImage,
+			// productImage,
 		};
 		const result = await createProduct(productData);
 		res.json(result);

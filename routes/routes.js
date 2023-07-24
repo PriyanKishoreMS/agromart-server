@@ -11,7 +11,7 @@ const {
 	postProduct,
 } = require("../controllers/productController");
 const router = express.Router();
-const auth = require("../middleware/auth");
+const { auth } = require("../middleware/auth");
 
 router.route("/getUser").get(getUsers);
 router.route("/postUser").post(postUsers);
