@@ -1,4 +1,3 @@
-const { landUpload } = require("../config/upload");
 const {
 	createLandService,
 	getAllLandServices,
@@ -57,18 +56,6 @@ exports.getLandCategory = async (req, res) => {
 exports.postLandService = async (req, res) => {
 	try {
 		const user = req.user.id;
-		// const landLocation = "Chengalpattu";
-		// const soilType = "Black";
-		// const landArea = "700";
-		// const cropType = "Tomato";
-		// const cultivationType = "Organic";
-		// const cultivationHistory = "Past 3 years organic cultivation";
-		// const waterFacility = "Yes";
-		// const landPrice = "70000";
-		// const landDesc = "Land good for cultivation";
-		// const waterFacility = "Yes";
-		// const landPrice = "100000";
-		// const landDesc = "This is a land";
 		const {
 			landLocation,
 			soilType,
@@ -84,11 +71,13 @@ exports.postLandService = async (req, res) => {
 		// 	landUpload.array("images", 3)(req, res, err => {
 		// 		if (err) return res.status(500).json({ msg: "Error uploading image" });
 		// 		let landImage = req.files.map(file => file.path);
-		// 		console.log("first", landImage);
+		// 		// console.log("first", landImage);
 		// 		resolve(landImage);
 		// 	});
 		// });
 		// const landImage = await uploadPromise;
+		// console.log(req.body, req.files, "landData");
+		const landImage = req.files.map(file => file.path);
 		const landData = {
 			user,
 			landLocation,
@@ -100,7 +89,7 @@ exports.postLandService = async (req, res) => {
 			waterFacility,
 			landPrice,
 			landDesc,
-			// landImage,
+			landImage,
 		};
 		const result = await createLandService(landData);
 		res.json(result);

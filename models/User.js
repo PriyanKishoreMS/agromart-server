@@ -15,6 +15,11 @@ const UserSchema = new mongoose.Schema({
 		unique: true,
 		required: true,
 	},
+	userType: {
+		type: String,
+		enum: ["admin", "seller", "user"],
+		default: "user",
+	},
 	mobile: {
 		type: String,
 	},

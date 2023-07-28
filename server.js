@@ -5,12 +5,13 @@ const routes = require("./routes/routes.js");
 const connectMongoDB = require("./config/mongodb.js");
 const cors = require("cors");
 const dotenv = require("dotenv");
+const path = require("path");
 
 dotenv.config();
 connectMongoDB();
 
 app.use(express.json());
-app.use("/uploads", express.static("uploads"));
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 app.use(cors({ origin: "http://localhost:5173" }));
 
 app.use("/api", routes);

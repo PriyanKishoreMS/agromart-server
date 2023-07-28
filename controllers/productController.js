@@ -1,4 +1,3 @@
-const { productUpload } = require("../config/upload");
 const {
 	createProduct,
 	getAllProducts,
@@ -74,6 +73,7 @@ exports.postProduct = async (req, res) => {
 		// 	});
 		// });
 		// const productImage = await uploadPromise;
+		const productImage = req.files.map(file => file.path);
 		const productData = {
 			user,
 			productName,
@@ -82,7 +82,7 @@ exports.postProduct = async (req, res) => {
 			productDescription,
 			productPrice,
 			productQuantity,
-			// productImage,
+			productImage,
 		};
 		const result = await createProduct(productData);
 		res.json(result);

@@ -5,7 +5,8 @@
   "author": "Priyan Kishore M S",
   "license": "MIT",
   "scripts": {
-    "start": "nodemon server.js"
+    "start": "node server.js",
+    "dev": "nodemon server.js"
   },
   "engines": {
     "node": ">=14.20.1"
