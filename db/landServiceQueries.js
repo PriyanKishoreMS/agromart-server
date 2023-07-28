@@ -12,11 +12,10 @@ exports.createLandService = async landData => {
 
 exports.getAllLandServices = async (page, limit, search, sort, order) => {
 	try {
-		const sortOption = { [sort]: order === "desc" ? -1 : 1 };
-		const landServices = await LandService.find({
+		let landService = await LandService.find({
 			landLocation: { $regex: search, $options: "i" },
 		})
-			.sort(sortOption)
+			.sort({ [sort]: order })
 			.skip(page * limit)
 			.limit(limit)
 			.populate("user", "name photoURL");
@@ -25,10 +24,9 @@ exports.getAllLandServices = async (page, limit, search, sort, order) => {
 			landLocation: { $regex: search, $options: "i" },
 		});
 		const totalPages = Math.ceil(total / limit);
-
 		return {
-			page,
-			landServices,
+			page: page + 1,
+			landService,
 			totalPages,
 		};
 	} catch (err) {
