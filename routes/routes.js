@@ -1,5 +1,9 @@
 const express = require("express");
-const { getUsers, postUsers } = require("../controllers/userController");
+const {
+	getUsers,
+	postUsers,
+	updateUsers,
+} = require("../controllers/userController");
 const {
 	getLandServices,
 	postLandService,
@@ -16,6 +20,7 @@ const { landUpload, productUpload } = require("../config/upload");
 
 router.route("/getUser").get(getUsers);
 router.route("/postUser").post(postUsers);
+router.route("/updateUser").put(auth, updateUsers);
 
 router.route("/getLandService").get(auth, getLandServices);
 router.route("/getLandService/:category").get(auth, getLandCategory);

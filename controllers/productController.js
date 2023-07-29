@@ -15,8 +15,8 @@ exports.getProducts = async (req, res) => {
 		let products = await getAllProducts(page, limit, search, sort, order);
 		res.json(products);
 	} catch (err) {
-		console.error({ Message: "Controller Error getting Products", Error: err });
-		res.status(500).send("Server Error");
+		console.error(err);
+		res.status(500).json({ msg: "Error getting products", err: err.message });
 	}
 };
 
@@ -39,11 +39,10 @@ exports.getProductCategory = async (req, res) => {
 		);
 		res.json(products);
 	} catch (err) {
-		console.error({
-			Message: "Controller Error getting category Products",
-			Error: err,
-		});
-		res.status(500).send("Server Error");
+		console.error(err);
+		res
+			.status(500)
+			.json({ msg: "Error getting product category", err: err.message });
 	}
 };
 
@@ -58,21 +57,6 @@ exports.postProduct = async (req, res) => {
 			productQuantity,
 		} = req.body;
 		const user = req.user.id;
-		// const productName = "Apple";
-		// const productCategory = "Fruit";
-		// const productManufacturer = "Nepal";
-		// const productDescription = "This is an apple";
-		// const productPrice = "100";
-		// const productQuantity = "10";
-		// const uploadPromise = new Promise((resolve, reject) => {
-		// 	productUpload.array("images", 3)(req, res, err => {
-		// 		if (err) return res.status(500).json({ msg: "Error uploading image" });
-		// 		let productImage = req.files.map(file => file.path);
-		// 		console.log("first", productImage);
-		// 		resolve(productImage);
-		// 	});
-		// });
-		// const productImage = await uploadPromise;
 		const productImage = req.files.map(file => file.path);
 		const productData = {
 			user,
@@ -87,7 +71,7 @@ exports.postProduct = async (req, res) => {
 		const result = await createProduct(productData);
 		res.json(result);
 	} catch (err) {
-		console.error({ Message: "Controller Error posting product", Error: err });
-		res.status(500).send("Server Error");
+		console.error(err);
+		res.status(500).json({ msg: "Error creating product", err: err.message });
 	}
 };

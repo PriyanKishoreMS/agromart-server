@@ -1,4 +1,9 @@
-const { findUser, createNewUser, getAllUsers } = require("../db/userQueries");
+const {
+	findUser,
+	createNewUser,
+	getAllUsers,
+	updateUsers,
+} = require("../db/userQueries");
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
 const jwtSecret = process.env.JWT_SECRET;
@@ -14,13 +19,13 @@ exports.getUsers = async (req, res) => {
 		let users = await getAllUsers(page, limit, search, sort, order);
 		res.json(users);
 	} catch (err) {
-		console.error(err.message);
-		res.status(500).send("Server Error");
+		console.error(err);
+		res.status(500).json({ msg: "Error getting users", err: err.message });
 	}
 };
 
 exports.postUsers = async (req, res) => {
-	const { uid, name, email, mobile, photoURL } = req.body;
+	const { uid, name, email, mobile, photoURL, userType } = req.body;
 	try {
 		let user = await findUser(email);
 		if (user) {
@@ -35,7 +40,15 @@ exports.postUsers = async (req, res) => {
 				res.json({ token });
 			});
 		} else {
-			user = await createNewUser(uid, name, email, mobile, photoURL);
+			let user = {
+				uid,
+				name,
+				email,
+				mobile,
+				photoURL,
+				userType,
+			};
+			user = await createNewUser(user);
 			await user.save();
 			console.log(user.id, "record created");
 			const payload = {
@@ -50,7 +63,27 @@ exports.postUsers = async (req, res) => {
 			});
 		}
 	} catch (err) {
-		console.error(err.message);
-		res.status(500).send("Server Error");
+		console.error(err);
+		res.status(500).json({ msg: "Error creating user", err: err.message });
+	}
+};
+
+exports.updateUsers = async (req, res) => {
+	try {
+		const id = req.user.id;
+		const { name, mobile, photoURL, userType } = req.body;
+
+		const userData = {
+			name,
+			mobile,
+			photoURL,
+			userType,
+		};
+
+		const user = await updateUsers(id, userData);
+		res.json(user);
+	} catch (err) {
+		console.error(err);
+		res.status(500).json({ msg: "Error updating user", err: err.message });
 	}
 };

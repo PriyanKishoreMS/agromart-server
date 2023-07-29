@@ -40,19 +40,26 @@ exports.getAllUsers = async (page, limit, search, sort, order) => {
 	}
 };
 
-exports.createNewUser = async (uid, name, email, mobile, photoURL) => {
+exports.createNewUser = async userData => {
 	try {
-		let user = new User({
-			uid,
-			name,
-			email,
-			mobile,
-			photoURL,
-		});
-
+		let user = new User(userData);
 		await user.save();
 		return user;
 	} catch (err) {
 		console.error({ Message: "Error creating user", Error: err });
+	}
+};
+
+exports.updateUsers = async (id, userData) => {
+	try {
+		let user = await User.findByIdAndUpdate(
+			id,
+			{ $set: userData },
+			{ new: true }
+		);
+		if (!user) throw new Error("User not found");
+		return user;
+	} catch (err) {
+		throw new Error(err);
 	}
 };
