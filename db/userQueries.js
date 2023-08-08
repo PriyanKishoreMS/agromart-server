@@ -1,4 +1,6 @@
 const User = require("../models/User");
+const LandService = require("../models/LandService");
+const Product = require("../models/Product");
 
 exports.findUser = async email => {
 	try {
@@ -71,6 +73,48 @@ exports.deleteUser = async id => {
 		return user;
 	} catch (err) {
 		console.error({ Message: "Error deleting user", Error: err });
+		throw err;
+	}
+};
+
+exports.getUserLandsOnDb = async (id, page, limit, sort, order) => {
+	try {
+		let lands = await LandService.find({ user: id })
+			.sort({ [sort]: order })
+			.skip(page * limit)
+			.limit(limit);
+
+		const total = await LandService.countDocuments({ user: id });
+		const totalPages = Math.ceil(total / limit);
+
+		return {
+			page: page + 1,
+			lands,
+			totalPages,
+		};
+	} catch (err) {
+		console.error({ Message: "Error getting user lands", Error: err });
+		throw err;
+	}
+};
+
+exports.getUserProductsOnDb = async (id, page, limit, sort, order) => {
+	try {
+		let products = await Product.find({ user: id })
+			.sort({ [sort]: order })
+			.skip(page * limit)
+			.limit(limit);
+
+		const total = await Product.countDocuments({ user: id });
+		const totalPages = Math.ceil(total / limit);
+
+		return {
+			page: page + 1,
+			products,
+			totalPages,
+		};
+	} catch (err) {
+		console.error({ Message: "Error getting user products", Error: err });
 		throw err;
 	}
 };

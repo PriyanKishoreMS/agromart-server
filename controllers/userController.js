@@ -1,9 +1,12 @@
+const { get } = require("mongoose");
 const {
 	findUser,
 	createNewUser,
 	getAllUsers,
 	deleteUser,
 	updateUsers,
+	getUserLandsOnDb,
+	getUserProductsOnDb,
 } = require("../db/userQueries");
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
@@ -122,5 +125,44 @@ exports.deleteUserByAdmin = async (req, res) => {
 	} catch (err) {
 		console.error(err);
 		res.status(500).json({ msg: "Error deleting user", err: err.message });
+	}
+};
+
+exports.getUserLands = async (req, res) => {
+	try {
+		const id = req.params.id;
+		const page = req.query.page - 1 || 0;
+		const limit = req.query.limit || 10;
+		const order = req.query.order || "desc";
+		const sort = req.query.sort || "updatedAt";
+
+		const response = await getUserLandsOnDb(id, page, limit, sort, order);
+		if (!response) {
+			return res.status(404).json({ msg: "User not found" });
+		}
+		res.json(response);
+	} catch (err) {
+		console.error(err);
+		res.status(500).json({ msg: "Error getting user lands", err: err.message });
+	}
+};
+
+exports.getUserProducts = async (req, res) => {
+	try {
+		const id = req.params.id;
+		const page = req.query.page - 1 || 0;
+		const limit = req.query.limit || 10;
+		const order = req.query.order || "desc";
+		const sort = req.query.sort || "updatedAt";
+		const response = await getUserProductsOnDb(id, page, limit, sort, order);
+		if (!response) {
+			return res.status(404).json({ msg: "User not found" });
+		}
+		res.json(response);
+	} catch (err) {
+		console.error(err);
+		res
+			.status(500)
+			.json({ msg: "Error getting user products", err: err.message });
 	}
 };

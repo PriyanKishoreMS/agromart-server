@@ -5,6 +5,8 @@ const {
 	updateUsers,
 	updateUserByAdmin,
 	deleteUserByAdmin,
+	getUserLands,
+	getUserProducts,
 } = require("../controllers/userController");
 const {
 	getLandServices,
@@ -30,6 +32,8 @@ router.route("/postUser").post(postUsers);
 router.route("/updateUser").put(auth, updateUsers);
 router.route("/updateUser/:id").put(adminAuth, updateUserByAdmin);
 router.route("/deleteUser/:id").delete(adminAuth, deleteUserByAdmin);
+router.route("/userLands/:id").get(auth, getUserLands);
+router.route("/userProducts/:id").get(auth, getUserProducts);
 
 router.route("/getLandService").get(auth, getLandServices);
 // router.route("/getLandService/:category").get(auth, getLandCategory);
