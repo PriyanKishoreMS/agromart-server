@@ -63,3 +63,14 @@ exports.updateUsers = async (id, userData) => {
 		throw new Error(err);
 	}
 };
+
+exports.deleteUser = async id => {
+	try {
+		let user = await User.findByIdAndDelete(id);
+		if (!user) return null;
+		return user;
+	} catch (err) {
+		console.error({ Message: "Error deleting user", Error: err });
+		throw err;
+	}
+};

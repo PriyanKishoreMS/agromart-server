@@ -2,7 +2,11 @@ const {
 	createLandService,
 	getAllLandServices,
 	getAllLandServicesinCategory,
+	getLandServiceByIdOnDb,
+	deleteLandServiceOnDb,
+	updateLandServiceOnDb,
 } = require("../db/landServiceQueries");
+const fs = require("fs");
 
 exports.getLandServices = async (req, res) => {
 	try {
@@ -85,5 +89,81 @@ exports.postLandService = async (req, res) => {
 	} catch (err) {
 		console.error(err);
 		res.status(500).json({ msg: "Error creating land", err: err.message });
+	}
+};
+
+exports.getLandServiceById = async (req, res) => {
+	try {
+		const id = req.params.id;
+		const result = await getLandServiceByIdOnDb(id);
+		if (!result) return res.status(404).json({ msg: "Land not found" });
+		res.json(result);
+	} catch (err) {
+		console.error(err);
+		res.status(500).json({ msg: "Error getting land", err: err.message });
+	}
+};
+
+exports.deleteLandService = async (req, res) => {
+	try {
+		const reqUser = req.user.id;
+		const role = req.user.role;
+		const id = req.params.id;
+		const doc = await getLandServiceByIdOnDb(id);
+		if (!doc) return res.status(404).json({ msg: "Land not found" });
+		const docUser = doc.user._id.toString();
+		if (reqUser !== docUser && role !== "admin")
+			return res.status(401).json({ msg: "Unauthorized" });
+		const result = await deleteLandServiceOnDb(id);
+		const photos = result.landImage;
+		photos.forEach(photo => {
+			fs.unlinkSync(photo);
+		});
+		res.json({ result, msg: "Land deleted successfully" });
+	} catch (err) {
+		console.error(err);
+		res.status(500).json({ msg: "Error deleting land", err: err.message });
+	}
+};
+
+exports.updateLandService = async (req, res) => {
+	try {
+		const reqUser = req.user.id;
+		const role = req.user.role;
+		const id = req.params.id;
+		const doc = await getLandServiceByIdOnDb(id);
+		if (!doc) return res.status(404).json({ msg: "Land not found" });
+		const docUser = doc.user._id.toString();
+		if (reqUser !== docUser && role !== "admin")
+			return res.status(401).json({ msg: "Unauthorized" });
+		const {
+			landLocation,
+			soilType,
+			landArea,
+			cropType,
+			cultivationType,
+			cultivationHistory,
+			waterFacility,
+			landPrice,
+			landDesc,
+		} = req.body;
+		const landImage = req.files.map(file => file.path);
+		const landData = {
+			landLocation,
+			soilType,
+			landArea,
+			cropType,
+			cultivationType,
+			cultivationHistory,
+			waterFacility,
+			landPrice,
+			landDesc,
+			landImage,
+		};
+		const result = await updateLandServiceOnDb(id, landData);
+		res.json({ result, msg: "Land updated successfully" });
+	} catch (err) {
+		console.error(err);
+		res.status(500).json({ msg: "Error updating land", err: err.message });
 	}
 };

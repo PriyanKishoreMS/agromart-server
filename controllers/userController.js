@@ -2,6 +2,7 @@ const {
 	findUser,
 	createNewUser,
 	getAllUsers,
+	deleteUser,
 	updateUsers,
 } = require("../db/userQueries");
 const jwt = require("jsonwebtoken");
@@ -33,11 +34,12 @@ exports.postUsers = async (req, res) => {
 			const payload = {
 				user: {
 					id: user.id,
+					role: user.userType,
 				},
 			};
 			jwt.sign(payload, jwtSecret, {}, (err, token) => {
 				if (err) throw err;
-				res.json({ token });
+				res.json({ token, user });
 			});
 		} else {
 			let user = {
@@ -54,12 +56,13 @@ exports.postUsers = async (req, res) => {
 			const payload = {
 				user: {
 					id: user.id,
+					role: user.userType,
 				},
 			};
 
 			jwt.sign(payload, jwtSecret, {}, (err, token) => {
 				if (err) throw err;
-				res.json({ token });
+				res.json({ token, user });
 			});
 		}
 	} catch (err) {
@@ -85,5 +88,39 @@ exports.updateUsers = async (req, res) => {
 	} catch (err) {
 		console.error(err);
 		res.status(500).json({ msg: "Error updating user", err: err.message });
+	}
+};
+
+exports.updateUserByAdmin = async (req, res) => {
+	try {
+		const id = req.params.id;
+		const { name, mobile, photoURL, userType } = req.body;
+
+		const userData = {
+			name,
+			mobile,
+			photoURL,
+			userType,
+		};
+
+		const user = await updateUsers(id, userData);
+		res.json(user);
+	} catch (err) {
+		console.error(err);
+		res.status(500).json({ msg: "Error updating user", err: err.message });
+	}
+};
+
+exports.deleteUserByAdmin = async (req, res) => {
+	try {
+		const id = req.params.id;
+		const user = await deleteUser(id);
+		if (!user) {
+			return res.status(404).json({ msg: "User not found" });
+		}
+		res.json({ user, msg: "User deleted" });
+	} catch (err) {
+		console.error(err);
+		res.status(500).json({ msg: "Error deleting user", err: err.message });
 	}
 };

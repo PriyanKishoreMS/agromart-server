@@ -2,6 +2,8 @@ const {
 	createProduct,
 	getAllProducts,
 	getAllProductsinCategory,
+	deleteProductOnDb,
+	getProductByIdOnDb,
 } = require("../db/productQueries");
 
 exports.getProducts = async (req, res) => {
@@ -73,5 +75,39 @@ exports.postProduct = async (req, res) => {
 	} catch (err) {
 		console.error(err);
 		res.status(500).json({ msg: "Error creating product", err: err.message });
+	}
+};
+
+exports.getProductById = async (req, res) => {
+	try {
+		const id = req.params.id;
+		const result = await getProductByIdOnDb(id);
+		if (!result) return res.status(404).json({ msg: "Product not found" });
+		res.json(result);
+	} catch (err) {
+		console.error(err);
+		res.status(500).json({ msg: "Error getting product", err: err.message });
+	}
+};
+
+exports.deleteProduct = async (req, res) => {
+	try {
+		const reqUser = req.user.id;
+		const role = req.user.role;
+		const id = req.params.id;
+		const doc = await getProductByIdOnDb(id);
+		if (!doc) return res.status(404).json({ msg: "Product not found" });
+		const docUser = doc.user._id.toString();
+		if (reqUser !== docUser && role !== "admin")
+			return res.status(401).json({ msg: "Unauthorized" });
+		const result = await deleteProductOnDb(id);
+		const photos = result.productImage;
+		photos.forEach(photo => {
+			fs.unlinkSync(photo);
+		});
+		res.json({ result, msg: "Product deleted successfully" });
+	} catch (err) {
+		console.error(err);
+		res.status(500).json({ msg: "Error deleting product", err: err.message });
 	}
 };

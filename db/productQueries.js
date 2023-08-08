@@ -72,3 +72,25 @@ exports.createProduct = async productData => {
 		throw err;
 	}
 };
+
+exports.getProductByIdOnDb = async id => {
+	try {
+		let product = await Product.findById(id).populate("user", "name photoURL");
+		if (!product) return null;
+		return product;
+	} catch (err) {
+		console.error({ Message: "Query Error getting product by id", Error: err });
+		throw err;
+	}
+};
+
+exports.deleteProductOnDb = async id => {
+	try {
+		let product = await Product.findByIdAndDelete(id);
+		if (!product) return null;
+		return product;
+	} catch (err) {
+		console.error({ Message: "Query Error deleting product", Error: err });
+		throw err;
+	}
+};
