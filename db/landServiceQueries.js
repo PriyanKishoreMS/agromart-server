@@ -18,7 +18,7 @@ exports.getAllLandServices = async (page, limit, search, sort, order) => {
 			.sort({ [sort]: order })
 			.skip(page * limit)
 			.limit(limit)
-			.populate("user", "name photoURL");
+			.populate("user", "name photoURL email");
 
 		const total = await LandService.countDocuments({
 			landLocation: { $regex: search, $options: "i" },
