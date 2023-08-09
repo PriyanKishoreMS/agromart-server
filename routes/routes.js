@@ -27,7 +27,7 @@ const router = express.Router();
 const { auth, adminAuth } = require("../middleware/auth");
 const { landUpload, productUpload } = require("../config/upload");
 
-router.route("/getUser").get(getUsers);
+router.route("/getUser").get(adminAuth, getUsers);
 router.route("/postUser").post(postUsers);
 router.route("/updateUser").put(auth, updateUsers);
 router.route("/updateUser/:id").put(adminAuth, updateUserByAdmin);
