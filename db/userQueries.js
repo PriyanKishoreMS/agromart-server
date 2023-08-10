@@ -35,6 +35,7 @@ exports.getAllUsers = async (page, limit, search, sort, order) => {
 		return {
 			page: page + 1,
 			user,
+			total,
 			totalPages,
 		};
 	} catch (err) {
@@ -90,6 +91,7 @@ exports.getUserLandsOnDb = async (id, page, limit, sort, order) => {
 		return {
 			page: page + 1,
 			lands,
+			total,
 			totalPages,
 		};
 	} catch (err) {
@@ -111,6 +113,7 @@ exports.getUserProductsOnDb = async (id, page, limit, sort, order) => {
 		return {
 			page: page + 1,
 			products,
+			total,
 			totalPages,
 		};
 	} catch (err) {

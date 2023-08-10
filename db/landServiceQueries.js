@@ -27,6 +27,7 @@ exports.getAllLandServices = async (page, limit, search, sort, order) => {
 		return {
 			page: page + 1,
 			landService,
+			total,
 			totalPages,
 		};
 	} catch (err) {
@@ -61,6 +62,7 @@ exports.getAllLandServicesinCategory = async (
 		return {
 			page: page + 1,
 			lands,
+			total,
 			totalPages,
 		};
 	} catch (err) {

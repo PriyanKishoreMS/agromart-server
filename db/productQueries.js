@@ -17,6 +17,7 @@ exports.getAllProducts = async (page, limit, search, sort, order) => {
 		return {
 			page: page + 1,
 			products,
+			total,
 			totalPages,
 		};
 	} catch (err) {
@@ -51,6 +52,7 @@ exports.getAllProductsinCategory = async (
 		return {
 			page: page + 1,
 			products,
+			total,
 			totalPages,
 		};
 	} catch (err) {
