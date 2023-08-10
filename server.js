@@ -4,6 +4,7 @@ const PORT = process.env.PORT || 3000;
 const routes = require("./routes/routes.js");
 const connectMongoDB = require("./config/mongodb.js");
 const cors = require("cors");
+app.use(cors());
 const dotenv = require("dotenv");
 const path = require("path");
 
