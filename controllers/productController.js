@@ -59,16 +59,7 @@ exports.postProduct = async (req, res) => {
 			productQuantity,
 		} = req.body;
 		const user = req.user.id;
-		let productImage = {};
-		productImage = req.files.map(file => {
-			return {
-				name: file.originalname,
-				image: {
-					data: file.buffer,
-					contentType: file.mimetype,
-				},
-			};
-		});
+		const productImage = req.files.map(file => file.path);
 		const productData = {
 			user,
 			productName,

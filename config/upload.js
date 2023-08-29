@@ -18,8 +18,5 @@ const productFileStorageEngine = multer.diskStorage({
 	},
 });
 
-const storage = multer.memoryStorage();
-
-// exports.landUpload = multer({ storage: landFileStorageEngine });
-// exports.productUpload = multer({ storage: productFileStorageEngine });
-exports.upload = multer({ storage: storage });
+exports.landUpload = multer({ storage: landFileStorageEngine });
+exports.productUpload = multer({ storage: productFileStorageEngine });

@@ -42,17 +42,7 @@ const LandSchema = new mongoose.Schema(
 		landDesc: {
 			type: String,
 		},
-		landImage: [
-			{
-				name: {
-					type: String,
-				},
-				image: {
-					data: Buffer,
-					contentType: String,
-				},
-			},
-		],
+		landImage: [String],
 	},
 	{ timestamps: true }
 );

@@ -17,7 +17,7 @@ const UserSchema = new mongoose.Schema({
 	},
 	userType: {
 		type: String,
-		enum: ["admin", "seller", "user"],
+		enum: ["admin", "user"],
 		default: "user",
 	},
 	mobile: {

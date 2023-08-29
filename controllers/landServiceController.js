@@ -70,16 +70,7 @@ exports.postLandService = async (req, res) => {
 			landPrice,
 			landDesc,
 		} = req.body;
-		let landImage = {};
-		landImage = req.files.map(file => {
-			return {
-				name: file.originalname,
-				image: {
-					data: file.buffer,
-					contentType: file.mimetype,
-				},
-			};
-		});
+		const landImage = req.files.map(file => file.path);
 		const landData = {
 			user,
 			landLocation,
