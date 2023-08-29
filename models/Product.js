@@ -26,7 +26,17 @@ const ProductSchema = new mongoose.Schema(
 			type: String,
 			required: true,
 		},
-		productImage: [String],
+		productImage: [
+			{
+				name: {
+					type: String,
+				},
+				image: {
+					data: Buffer,
+					contentType: String,
+				},
+			},
+		],
 		productQuantity: {
 			type: Number,
 			required: true,

@@ -25,7 +25,8 @@ const {
 } = require("../controllers/productController");
 const router = express.Router();
 const { auth, adminAuth } = require("../middleware/auth");
-const { landUpload, productUpload } = require("../config/upload");
+// const { landUpload, productUpload } = require("../config/upload");
+const { upload } = require("../config/upload");
 
 router.route("/getUser").get(adminAuth, getUsers);
 router.route("/postUser").post(postUsers);
@@ -38,18 +39,24 @@ router.route("/userProducts/:id").get(auth, getUserProducts);
 router.route("/getLandService").get(auth, getLandServices);
 // router.route("/getLandService/:category").get(auth, getLandCategory);
 router.route("/getLandService/:id").get(auth, getLandServiceById);
+// router
+// 	.route("/postLandService")
+// 	.post(auth, landUpload.array("landImage", 5), postLandService);
 router
 	.route("/postLandService")
-	.post(auth, landUpload.array("landImage", 5), postLandService);
+	.post(auth, upload.array("landImage", 3), postLandService);
 router.route("/deleteLandService/:id").delete(auth, deleteLandService);
 // router.route("/updateLandService/:id").put(auth, updateLandService);
 
 router.route("/getProduct").get(auth, getProducts);
 // router.route("/getProduct/:category").get(auth, getProductCategory);
 router.route("/getProduct/:id").get(auth, getProductById);
+// router
+// 	.route("/postProduct")
+// 	.post(auth, productUpload.array("productImage", 5), postProduct);
 router
 	.route("/postProduct")
-	.post(auth, productUpload.array("productImage", 5), postProduct);
+	.post(auth, upload.array("productImage", 3), postProduct);
 router.route("/deleteProduct/:id").delete(auth, deleteProduct);
 
 module.exports = router;
