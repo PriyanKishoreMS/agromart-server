@@ -2,7 +2,16 @@ const { createDonation, getAllDonations } = require("../db/donationQueries");
 
 exports.postDonation = async (req, res) => {
 	try {
-		const { name, email, donation, purpose, type, message } = req.body;
+		const {
+			name,
+			email,
+			donation,
+			purpose,
+			type,
+			message,
+			transactionId,
+			transactionMode,
+		} = req.body;
 		const donateData = {
 			name,
 			email,
@@ -10,6 +19,8 @@ exports.postDonation = async (req, res) => {
 			purpose,
 			type,
 			message,
+			transactionId,
+			transactionMode,
 		};
 		const result = await createDonation(donateData);
 		res.json(result);

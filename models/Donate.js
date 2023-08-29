@@ -14,6 +14,14 @@ const DonateSchema = new mongoose.Schema(
 			type: Number,
 			required: true,
 		},
+		transactionId: {
+			type: String,
+			required: true,
+		},
+		transactionMode: {
+			type: String,
+			required: true,
+		},
 		purpose: {
 			type: String,
 		},

@@ -27,12 +27,26 @@ const {
 	postDonation,
 	getDonations,
 } = require("../controllers/donationController");
+const {
+	getGallery,
+	postGallery,
+	deleteGallery,
+} = require("../controllers/galleryController");
 const router = express.Router();
 const { auth, adminAuth } = require("../middleware/auth");
-const { landUpload, productUpload } = require("../config/upload");
+const {
+	landUpload,
+	productUpload,
+	galleryUpload,
+} = require("../config/upload");
 
 router.route("/postDonation").post(postDonation);
 router.route("/getDonations").get(getDonations);
+router
+	.route("/postGallery")
+	.post(adminAuth, galleryUpload.single("galleryImage"), postGallery);
+router.route("/getGallery").get(getGallery);
+router.route("/deleteGallery/:id").delete(adminAuth, deleteGallery);
 router.route("/getUser").get(adminAuth, getUsers);
 router.route("/postUser").post(postUsers);
 router.route("/updateUser").put(auth, updateUsers);
