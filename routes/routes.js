@@ -32,6 +32,11 @@ const {
 	postGallery,
 	deleteGallery,
 } = require("../controllers/galleryController");
+const {
+	getBlogs,
+	postBlog,
+	deleteBlog,
+} = require("../controllers/blogsController");
 const router = express.Router();
 const { auth, adminAuth } = require("../middleware/auth");
 const {
@@ -71,5 +76,8 @@ router
 	.route("/postProduct")
 	.post(auth, productUpload.array("productImage", 5), postProduct);
 router.route("/deleteProduct/:id").delete(auth, deleteProduct);
+router.route("/getBlogs").get(getBlogs);
+router.route("/postBlog").post(adminAuth, postBlog);
+router.route("/deleteBlog/:id").delete(adminAuth, deleteBlog);
 
 module.exports = router;
